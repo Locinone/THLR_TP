@@ -23,6 +23,8 @@ class RegEx:
     # Question 4
     # Output an epsilon-NFA equivalent to the regular expression
     def to_enfa(self):
+        enfa = ENFA([0,1],[0],[1],[])
+        enfa.convert_reg_ex(0,1,self)
         pass
 
 
@@ -80,14 +82,14 @@ class ENFA:
     # Thompson's algorithm
     def convert_reg_ex(self, origin, destination, reg_ex):
         #print(reg_ex.to_string())
-        if reg_ex.symbole == ".":
+        if reg_ex.symbol == ".":
             one = self.new_state()
             two = self.new_state()
             self.edges.append((one,"",two))
             convert_reg_ex(self,origin,one,reg_ex.children[0])
             convert_reg_ex(self,two,destination,reg_ex.children[1])
             pass
-        elif(reg_ex.symbole == "+"):
+        elif(reg_ex.symbol == "+"):
             one = self.new_state()
             two = self.new_state()
             three = self.new_state()
@@ -97,7 +99,7 @@ class ENFA:
             convert_reg_ex(self,one,three,reg_ex.children[0])
             convert_reg_ex(self,two,four,reg_ex.children[1])
             pass
-        elif(reg_ex.symbole == "*"):
+        elif(reg_ex.symbol == "*"):
             one = self.new_state()
             two = self.new_state()
             self.edges.append((two,"",one))
@@ -107,8 +109,8 @@ class ENFA:
             convert_reg_ex(self,one,two,reg_ex.children[0])
             pass
         else:
-            self.new_letter(reg_ex.symbole)
-            self.edges.append((origin,reg_ex.symbole,destination))
+            self.new_letter(reg_ex.symbol)
+            self.edges.append((origin,reg_ex.symbol,destination))
             pass
 
         self.next_states = {(state, letter): set()
