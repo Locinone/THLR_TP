@@ -25,6 +25,7 @@ class RegEx:
     def to_enfa(self):
         enfa = ENFA([0,1],[0],[1],[])
         enfa.convert_reg_ex(0,1,self)
+        return enfa
         pass
 
 
@@ -121,12 +122,33 @@ class ENFA:
     # Question 5
     # Returns the epsilon forward closure of a state 'origin'
     def epsilon_reachable(self, origin):
+        eClosure = set([origin])
+        fixed_point_reached = False
+        while not fixed_point_reached:
+            fixed_point_reached = True
+            for state in eClosure:
+                for destination in self.next_states[(state,"")]:
+                    if not destination in eClosure:
+                        fixed_point_reached = False
+                        eClosure.add(destination)
+        return eClosure
         pass
 
     # Question 6
     # Returns a NFA equivalent to the epsilon NFA by performing a backward
     # removal of epsilon transitions
     def to_nfa(self):
+        all_states = set([self.initial_states[0]])
+        edges = []
+        new_final = []
+        for state in self.all_states():
+            if reached in self.final_states:
+                new_final.append(state)
+            for letter in self.alphabet:
+                for target in self.next_states[reached,letter)]:
+                    all_states.append(target)
+                    edges.append((states,letter,target))
+        return NFA(all_states, self.initial_states, new_final, self.alphabet, edges)
         pass
 
 
